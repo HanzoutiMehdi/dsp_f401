@@ -39,7 +39,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
-#define FFT_LENGTH         100
+#define FFT_LENGTH         256
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
@@ -76,6 +76,42 @@ typedef struct
 #define FIRST_HALF           1
 #define SECOND_HALF          2
 
+typedef enum{  FIR_FILTRE, IIR_FILTRE, RC_FILTRE, NOTCH_FILTRE }FiltreType;
+
+
+typedef enum {ACCELRO, SIN_WAVE,DUAL_SIN_WAVE, THRID_SIN_WAVE,GYRO_WAVE} InType;
+typedef struct{
+	InType Type;
+    float inputFreq1_Hz;   /*2Hz*/
+    float inputFreq2_Hz;
+    float inputFreq3_Hz ;   /*2Hz*/
+
+}inputSimuTypeDef;
+
+
+
+
+typedef struct
+{
+  uint8_t fft_enable;
+  uint8_t dft_enable;
+  uint8_t arm_enable;
+
+
+}fftType_TypedDef;
+
+typedef struct{
+
+	         inputSimuTypeDef   In;
+	         FiltreType    filtre_Type;
+
+	         uint8_t fir_enable;
+	         uint8_t iir_enable;
+	         uint8_t notch_enable;
+	         fftType_TypedDef fft;
+
+
+}SimuleTypeDef;
 
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);

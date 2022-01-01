@@ -63,43 +63,10 @@ int16_t  Acc[3];
 
 
 
-typedef enum {ACCELRO, SIN_WAVE,DUAL_SIN_WAVE, THRID_SIN_WAVE,GYRO_WAVE} InType;
-typedef struct{
-	InType Type;
-    float inputFreq1_Hz;   /*2Hz*/
-    float inputFreq2_Hz;
-    float inputFreq3_Hz ;   /*2Hz*/
-
-}inputSimuTypeDef;
 
 
 
 
-typedef struct
-{
-  uint8_t fft_enable;
-  uint8_t dft_enable;
-  uint8_t arm_enable;
-
-
-}fftType_TypedDef;
-
-
-typedef enum{  FIR_FILTRE, IIR_FILTRE, RC_FILTRE, NOTCH_FILTRE }FiltreType;
-
-
-typedef struct{
-
-	         inputSimuTypeDef   In;
-	         FiltreType    filtre_Type;
-
-	         uint8_t fir_enable;
-	         uint8_t iir_enable;
-	         uint8_t notch_enable;
-	         fftType_TypedDef fft;
-
-
-}SimuleTypeDef;
 
 SimuleTypeDef  hSim;
 
@@ -139,7 +106,7 @@ void vmainTask(void const * argument)
 
 
    	/*Init Sim*/
-  	hSim.In.inputFreq1_Hz=1.0f ;   /*1Hz*/
+  	hSim.In.inputFreq1_Hz=5.0f ;   /*5Hz*/
   	hSim.In.inputFreq2_Hz=30.0f;    /*30Hz*/
   	hSim.In.inputFreq3_Hz=12.0f ;   /*12Hz*/
 
@@ -190,7 +157,7 @@ void vmainTask(void const * argument)
 
 
 
-     if(hSim.fft.dft_enable==1U)
+     if((hSim.fft.dft_enable==1U) ||(hSim.fft.fft_enable==1U))
      {
     	 StoreNewSample(&in_fft,inputSignal );
     	 StoreNewSample(&out_fft,filt_out );
@@ -343,8 +310,6 @@ static float Get_NewSample(void)
 	float inputSignal;
 	    /*get time ----*/
 	    uint32_t time_s=HAL_GetTick();
-
-
 
 	    float inputSin = 100.0f*sin(2.0f*M_PI*hSim.In.inputFreq1_Hz*(0.001f*time_s ));
 
