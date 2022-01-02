@@ -10,7 +10,7 @@
 #include "main.h"
 #include "cmsis_os.h"
 #include "arm_math.h"
-
+#include "hamm128.h"
 /*FFT---------------------*/
 
 
@@ -69,6 +69,28 @@ static void dft(FFT_TypeDef *hfft, uint32_t buffer)
 
   }
 
+
+   /*Hamming Window*/
+  if (hfft->fft_windowing==HM_WIND)
+  {
+	  for (uint32_t i=indice_start; i<indice_end; i++)
+	  {
+	   hfft->Input[i].real=hfft->Input[i].real*hamming[i];
+	  }
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
 	  for (k=indice_start; k<indice_end; k++)
 	  {
 		 /*Clear */
@@ -107,6 +129,23 @@ static void fft(FFT_TypeDef *hfft, uint32_t buffer,ComplexTypeDef *w)
 			indice_end  =FFT_LENGTH;
 
 	  }
+
+
+	  if (hfft->fft_windowing==HM_WIND)
+	  {
+		  for (uint32_t i=indice_start; i<indice_end; i++)
+		  {
+		   hfft->Input[i].real=hfft->Input[i].real*hamming[i];
+		  }
+
+
+	  }
+
+
+
+
+
+
 
   for (k=indice_start ; k<indice_end ; k++)
    {
@@ -183,6 +222,9 @@ void fft_task(void const * argument)
 
            if(hSim.fft.dft_enable==1)
            {
+
+
+
 		   	  dft(&in_fft,rx_mesage);
 
 		   	  dft(&out_fft,rx_mesage);
